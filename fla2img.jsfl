@@ -29,9 +29,12 @@ function extractImages() {
 
 	var document,
 		path,
+		lpath,
 		image,
 		name,
-		imagesFolder;
+		lname,
+		imagesFolder,
+		linkageFolder;
 
 
 	for(var count = 0; count < documents.length; ++count) {
@@ -46,16 +49,20 @@ function extractImages() {
 		}
 		
 		// The path is relative to .fla file.
-		path = "file:///" + document.path.slice(0, document.path.lastIndexOf("/"));
+		rawpath = "file:///" + document.path.slice(0, document.path.lastIndexOf("/"));
 
 		// Images folder.
-		imagesFolder = "/" + getFileName(document.name) + "_images";
+		imagesFolder = "/" + getFileName(document.name) + "_images_by_name";
+		linkageFolder = "/" + getFileName(document.name) + "_images_by_linkage";
 
 		// Saving data to report it later.
-		report[count] = {document: document.name, files: 0, folder: imagesFolder};
+		report[count] = {document: document.name, files: 0, folder: imagesFolder, linkagefolder:linkageFolder};
 
 		// Creating images folder.
-		FLfile.createFolder(path = path.concat(imagesFolder));
+		FLfile.createFolder(path = rawpath.concat(imagesFolder));
+
+		// Creating images folder, where each file will be named by its linkage name, if it has one
+		FLfile.createFolder(lpath = rawpath.concat(linkageFolder));
 
 		document.library.items.forEach(function( p_item ) {
 
@@ -73,20 +80,26 @@ function extractImages() {
 
 					// Setting up temp document.
 					temp.width = image.getBits().width;
-                	temp.height = image.getBits().height;
+					temp.height = image.getBits().height;
 
 					image.x = 0;
 					image.y = 0;
 
 					// Keep the original image name.
 					name = getFileName(p_item.name);
+					lname = name;
+					if (p_item.linkageClassName)
+					{
+						lname = p_item.linkageClassName;
+					}
 
 					// Finally exporting.
 					temp.exportPNG(path + "/" + name + ".png", false, true);
+					temp.exportPNG(lpath + "/" + lname + ".png", false, true);
 
 					// Resetting temp document.
 					temp.selectAll();
-        			temp.deleteSelection();
+					temp.deleteSelection();
 					temp.selectNone();
 
 					// Removing all items added to temp's library to avoid conflicts.
