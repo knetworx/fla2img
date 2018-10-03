@@ -28,6 +28,7 @@ function extractImages() {
 	temp = new fl.createDocument();
 
 	var document,
+		rawpath,
 		path,
 		lpath,
 		image,
