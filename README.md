@@ -20,7 +20,7 @@ Or simply open the `.fla` files with the images you want, then drag `fla2img.jsf
 
 ## Notes and features
 
-* This will generate two folders: \<src\>_images_by_name and \<src\>_images by linkage
+* This will generate two folders: \<src\>_images_by_name and \<src\>_images_by_linkage
 	* The first folder will contain each image in the source fla by name
 	* The second folder will contain each image in the source fla by linkage, if it exists, or by name otherwise
 * It's recommended to close your current documents before executing this script.
